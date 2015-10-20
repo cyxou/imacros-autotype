@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "commonjs": true
+  },
+  "ecmaFeatures": {
+    "blockBindings": true,
+    "forOf": true,
+    "jsx": true
+  },
+  "rules": {
+    "semi": 2,
+    "no-multi-spaces": 0,
+    "no-mixed-spaces-and-tabs": 0,
+    "quotes": [2, "single"]
+  },
+  "globals": {
+    "imns": false,
+    "iimPlay": false,
+    "iimDisplay": false,
+    "iimPlayCode": false,
+    "iimGetLastText": false,
+    "iimGetLastError": false,
+    "iimGetLastExtract": false
+  }
+}
