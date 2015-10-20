@@ -1,3 +1,5 @@
 .DS_Store
 *.jar
 dist
+
+node_modules
