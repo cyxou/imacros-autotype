@@ -1,5 +1,5 @@
 {
-  "name": "autotype",
+  "name": "imacros-autotype",
   "version": "1.0.0",
   "description": "Simple, accurate, typing simulation. Forked from Michael Monteleone's jquery.autotype",
   "main": "autotype.js",
