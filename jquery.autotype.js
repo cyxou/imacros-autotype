@@ -9,7 +9,8 @@
  * Copyright (c) 2009 Michael Monteleone
  * Licensed under terms of the MIT License (README.markdown)
  */
-(function($) {
+
+var extend = require('extend');
 
   // code type constants
   var CHARACTER = 1,
@@ -44,12 +45,12 @@
           shift: false,
           ctrl: false
         },
-        explicitModifiers = $.extend({}, activeModifiers),
+        explicitModifiers = extend({}, activeModifiers),
         // buffer to hold construction of current control key
         currentControlKey = '',
         previousChar = '',
         pushCode = function(opts) {
-          codes.push($.extend({}, opts, activeModifiers));
+          codes.push(extend({}, opts, activeModifiers));
         },
         pushModifierBeginCode = function(modifierName) {
           activeModifiers[modifierName] = true;
@@ -177,40 +178,40 @@
       };
 
       // build out 3 event instances for all the steps of a key entry
-      var keyDownEvent = $.extend($.Event(), evnt, {
-        type: 'keydown',
+      var keyDownEvent = new window.KeyboardEvent('keydown', extend(evnt, {
         keyCode: code.keyCode,
         charCode: 0,
         which: code.keyCode
-      });
-      var keyPressEvent = $.extend($.Event(), evnt, {
-        type: 'keypress',
+      }));
+
+      var keyPressEvent = new window.KeyboardEvent('keypress', extend(evnt, {
         keyCode: 0,
         charCode: code.charCode,
         which: code.charCode || code.keyCode
-      });
-      var keyUpEvent = $.extend($.Event(), evnt, {
-        type: 'keyup',
+      }));
+
+      var keyUpEvent = new window.KeyboardEvent('keyup', extend(evnt, {
         keyCode: code.keyCode,
         charCode: 0,
         which: code.keyCode
-      });
+      }));
+
 
       // go ahead and trigger the first 2 (down and press)
       // a keyup of a modifier shouldn't also re-trigger a keydown
       if (code.type !== MODIFIER_END) {
-        field.trigger(keyDownEvent);
+        field.dispatchEvent(keyDownEvent);
       }
 
       // modifier keys don't have a keypress event, only down or up
       if (code.type !== MODIFIER_BEGIN && code.type !== MODIFIER_END) {
-        field.trigger(keyPressEvent);
+        field.dispatchEvent(keyPressEvent);
       }
 
       // only actually add the new character to the input if the keydown or keypress events
       // weren't cancelled by any consuming event handlers
-      if (!keyDownEvent.isPropagationStopped() &&
-        !keyPressEvent.isPropagationStopped()) {
+      /*if (!keyDownEvent.isPropagationStopped &&
+        !keyPressEvent.isPropagationStopped) {
         if (code.type === NON_CHARACTER) {
           switch (code.controlKeyName) {
             case 'enter':
@@ -223,12 +224,12 @@
         } else {
           field.val(field.val() + code.char);
         }
-      }
+      }*/
 
       // then also trigger the 3rd event (up)
       // a keydown of a modifier shouldn't also trigger a keyup until coded
       if (code.type !== MODIFIER_BEGIN) {
-        field.trigger(keyUpEvent);
+        field.dispatchEvent(keyUpEvent);
       }
     },
     triggerCodesOnField = function(codes, field, delay) {
@@ -239,22 +240,26 @@
           triggerCodeOnField(code, field);
           if (codes.length === 0) {
             window.clearInterval(keyInterval);
-            field.trigger('autotyped');
+            field.dispatchEvent('autotyped');
           }
         }, delay);
       } else {
-        $.each(codes, function() {
-          triggerCodeOnField(this, field);
+        codes.forEach(function(code) {
+          triggerCodeOnField(code, field);
         });
-        field.trigger('autotyped');
+        field.dispatchEvent('autotyped');
       }
     };
 
-  $.fn.autotype = function(value, options) {
-    if (value === undefined || value === null) {
-      throw ("Value is required by jQuery.autotype plugin");
+  function autotype(elements, value, options) {
+    if (elements === undefined || elements === null) {
+      throw ("Elements is required parameter.");
     }
-    var settings = $.extend({}, $.fn.autotype.defaults, options);
+    if (value === undefined || value === null) {
+      throw ("Value is required parameter.");
+    }
+    var settings = extend({}, autotype.defaults, options);
+
 
     // 1st Pass
     // step through the input string and convert it into
@@ -264,15 +269,15 @@
     // 2nd Pass
     // Run the translated codes against each input through a realistic
     // and cancelable series of key down/press/up events
-    return this.each(function() {
-      triggerCodesOnField(codes, $(this), settings.delay);
+    return elements.forEach(function(elem) {
+      triggerCodesOnField(codes, elem, settings.delay);
     });
   };
 
-  $.fn.autotype.defaults = {
+  autotype.defaults = {
     version: '0.5.0',
     keyBoard: 'ruRu',
-    delay: 0,
+    delay: 200,
     keyCodes: {
       enUs: {
         'back': 8,
@@ -638,4 +643,4 @@
     }
   };
 
-})(jQuery);
+module.exports = autotype;
