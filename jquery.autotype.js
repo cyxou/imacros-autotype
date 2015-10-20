@@ -231,14 +231,14 @@
         field.trigger(keyUpEvent);
       }
     },
-    triggerCodesOnField = function(codes, field, delay, global) {
+    triggerCodesOnField = function(codes, field, delay) {
       if (delay > 0) {
         codes = codes.reverse();
-        var keyInterval = global.setInterval(function() {
+        var keyInterval = window.setInterval(function() {
           var code = codes.pop();
           triggerCodeOnField(code, field);
           if (codes.length === 0) {
-            global.clearInterval(keyInterval);
+            window.clearInterval(keyInterval);
             field.trigger('autotyped');
           }
         }, delay);
@@ -265,7 +265,7 @@
     // Run the translated codes against each input through a realistic
     // and cancelable series of key down/press/up events
     return this.each(function() {
-      triggerCodesOnField(codes, $(this), settings.delay, settings.global);
+      triggerCodesOnField(codes, $(this), settings.delay);
     });
   };
 
@@ -273,7 +273,6 @@
     version: '0.5.0',
     keyBoard: 'enUs',
     delay: 0,
-    global: window,
     keyCodes: {
       enUs: {
         'back': 8,
