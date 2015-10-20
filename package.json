@@ -1,0 +1,30 @@
+{
+  "name": "autotype",
+  "version": "1.0.0",
+  "description": "Simple, accurate, typing simulation. Forked from Michael Monteleone's jquery.autotype",
+  "main": "autotype.js",
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "eslint": "^1.7.2",
+    "extend": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyxou/imacros-autotype.git"
+  },
+  "keywords": [
+    "imacros"
+  ],
+  "author": "Alex Sukhov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cyxou/imacros-autotype/issues"
+  },
+  "homepage": "https://github.com/cyxou/imacros-autotype#readme"
+}
